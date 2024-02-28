@@ -1,4 +1,4 @@
-name: Testing in dev environment
+name: Intigration
 on:
   push:
     branches:
@@ -7,13 +7,13 @@ on:
       
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-lates
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Node setup
-        uses: actions/setup-node@v2
+        uses: actions/setup-node
         with:
           node-version: '14.x'
       - name: Cache Dependencies
