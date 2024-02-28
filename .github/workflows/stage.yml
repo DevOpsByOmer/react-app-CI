@@ -1,0 +1,38 @@
+name: stage
+on:
+    push:
+      branches:
+        - stage
+        
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Node setup
+        uses: actions/setup-node@v4
+        with:
+          node-version: '14.x' # Adjust the version to your needs
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Building
+        run: npm run build
+
+      - name: Send a mail on failure
+        if: failure()
+        uses: wadeww/send-email-action@master
+        with:
+          server_address: smtp.gmail.com
+          port: 465
+          username: ${{secrets.MAIL_USERNAME}}
+          password: ${{secrets.MAIL_PASSWORD}}
+          subject: Workflow finished
+          body: Job  ${{job.status}}
+          to: dvop.omer@gmail.com
+          from: Github-action
+

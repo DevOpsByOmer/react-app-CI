@@ -1,0 +1,80 @@
+name: Testing in dev environment
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+      
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Node setup
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+      - name: Cache Dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+       
+            ~/.npm     
+            ~/.cache
+          key: dep-node-module-${{ runner.os }}-${{ hashFiles('**/package-lock.json')}}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Send a mail on failure
+        if: always()
+        uses: wadeww/send-email-action@master
+        with:
+          server_address: smtp.gmail.com
+          port: 465
+          username: ${{secrets.MAIL_USERNAME}}
+          password: ${{secrets.MAIL_PASSWORD}}
+          subject: Workflow finished
+          body: Job  ${{job.status}}
+          to: dvop.omer@gmail.com
+          from: Github-action
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Node setup
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14.x' 
+      - name: Cache Dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.npm
+            ~/.cache
+          key: dep-node-module-${{ runner.os }}-${{ hashFiles('**/package-lock.json')}}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Send a mail on failure
+        if: failure()
+        uses: wadeww/send-email-action@master
+        with:
+          server_address: smtp.gmail.com
+          port: 465
+          username: ${{secrets.MAIL_USERNAME}}
+          password: ${{secrets.MAIL_PASSWORD}}
+          subject: Workflow finished
+          body: Job  ${{job.status}}
+          to: dvop.omer@gmail.com
+          from: Github-action
