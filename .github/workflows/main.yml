@@ -1,4 +1,4 @@
-name: Intigration
+name: Ingration
 on:
   push:
     branches:
@@ -7,13 +7,13 @@ on:
       
 jobs:
   test:
-    runs-on: ubuntu-lates
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Node setup
-        uses: actions/setup-node
+        uses: actions/setup-node@v2
         with:
           node-version: '14.x'
       - name: Cache Dependencies
@@ -38,7 +38,7 @@ jobs:
           password: ${{secrets.MAIL_PASSWORD}}
           subject: Workflow finished
           body: Job  ${{job.status}}
-          to: dvop.omer@gmail.com
+          to: mohammed.omer@cybersapient.io
           from: Github-action
 
   build:
@@ -76,5 +76,5 @@ jobs:
           password: ${{secrets.MAIL_PASSWORD}}
           subject: Workflow finished
           body: Job  ${{job.status}}
-          to: dvop.omer@gmail.com
+          to: mohammed.omer@cybersapient.io
           from: Github-action
