@@ -1,12 +1,10 @@
 name: Build and push Docker image to DockerHub
 
-on:
- push:
-      branches:
-        - main
- workflow_dispatch:
+on: 
+  workflow_dispatch:
+    
 jobs:
-    push_to_registry:
+ push_to_registry:
      name: Push docker image
      runs-on: ubuntu-latest
      steps:
@@ -20,9 +18,8 @@ jobs:
              password: ${{ secrets.DOCKERHUB_TOKEN }}
 
         - name: Build and Push Dockerimg
-          uses: docker/build-push-action@v4
+          uses: docker/build-push-action@v4 
           with:
-            #context: DockerFile_dir
-            push: true
-            tags: saotech/githubactionpushed:v1
+             push: true
+             tags: saotech/githubactionpushed:v1
 
